@@ -24,13 +24,10 @@ struct NaneungolaeApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            NavigationView {
-                ContentView()
-                    .environmentObject(AuthStore())
-                    .environmentObject(UserStore())
-                    .environmentObject(FeedStore())
-                
-//            }
+            ContentView()
+                .environmentObject(AuthStore())
+                .environmentObject(UserStore())
+                .environmentObject(FeedStore())
         }
     }
 }

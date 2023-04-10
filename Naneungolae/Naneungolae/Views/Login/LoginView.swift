@@ -10,8 +10,8 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject var authStore: AuthStore
     
-    @State private var email: String = ""
-    @State private var password: String = ""
+    @State private var email: String = "test@test.com"
+    @State private var password: String = "123123"
     
     var body: some View {
         ZStack {

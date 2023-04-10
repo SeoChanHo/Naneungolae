@@ -6,11 +6,24 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct MatchingView: View {
+    // 새로운 포토스 피커
+    @State private var selectedItems: [PhotosPickerItem] = []
+    @State private var selectedPhotosData: [Data] = []
+    
     var keywords: [String] = ["응원", "위로", "자신감", "목표달성", "인정", "축하"]
     @State var selectedKeyword: String = "응원"
     @State var complimentText: String = ""
+    
+    func selectedPhotosToUIImage() -> [UIImage] {
+        var uiImages = [UIImage]()
+        for photoData in selectedPhotosData {
+            uiImages.append(UIImage(data: photoData)!)
+        }
+        return uiImages
+    }
     
     var body: some View {
         ZStack {
@@ -29,22 +42,49 @@ struct MatchingView: View {
                 }
                 ScrollView {
                     HStack {
-                        Rectangle()
-                            .fill(Color.black.opacity(0.2))
-                            .frame(width: 50, height: 50)
-                        
-                        Button {
-                            
-                        } label: {
-                            Text("사진 추가")
-                                .font(.system(size: 15))
-                                .frame(width: 70)
-                                .cornerRadius(16)
-                                .foregroundColor(.white)
+                        PhotosPicker(selection: $selectedItems, maxSelectionCount: 3, matching: .images) {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(.gray)
+                                .overlay {
+                                    Image(systemName: "camera.fill")
+                                }
+                                .padding(.horizontal)
                         }
+                        .foregroundColor(.black)
+                        .onChange(of: selectedItems) { newItems in
+                            for newItem in newItems {
+                                Task {
+                                    if let data = try? await newItem.loadTransferable(type: Data.self) {
+                                        selectedPhotosData.append(data)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(selectedPhotosData, id: \.self) { photoData in
+                                    if let image = UIImage(data: photoData) {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundColor(.white)
+                                            .frame(width: 60, height: 60)
+                                            .overlay {
+                                                Image(uiImage: image)
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 60, height: 60)
+                                                    .cornerRadius(10.0)
+                                                    .padding(.horizontal)
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                        .scrollDisabled(false)
                         Spacer()
                     }
-                    .padding(.leading, 8)
+                    .padding(.vertical, 10)
                     
                     HStack {
                         Text("키워드를 선택하세요")
