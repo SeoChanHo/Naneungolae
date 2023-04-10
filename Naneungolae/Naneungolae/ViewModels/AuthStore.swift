@@ -7,12 +7,15 @@
 
 import Foundation
 import FirebaseAuth
+import Firebase
 
 class AuthStore: ObservableObject {
     
     let userStore: UserStore = UserStore()
     
     @Published var isLogin: Bool = false
+    
+    @Published var currentUser: Firebase.User?
     
     let auth = Auth.auth()
     
@@ -36,8 +39,7 @@ class AuthStore: ObservableObject {
             }
             
             guard let user = authResult?.user else { return }
-            
-            self?.userStore.fetchUser(userEmail: user.email ?? "")
+            self?.currentUser = user
             self?.isLogin = true
         }
     }

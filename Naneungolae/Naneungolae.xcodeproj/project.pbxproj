@@ -29,6 +29,8 @@
 		AED5EA5B29DF09BC00C0653D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5A29DF09BC00C0653D /* FirebaseAuth */; };
 		AED5EA5D29DF09BC00C0653D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5C29DF09BC00C0653D /* FirebaseFirestore */; };
 		AED5EA5F29DF09BC00C0653D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5E29DF09BC00C0653D /* FirebaseFirestoreSwift */; };
+		AEDC24E429E39ADF00C8D7F1 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = AEDC24E329E39ADF00C8D7F1 /* FirebaseStorage */; };
+		AEDC24E629E3A6DF00C8D7F1 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDC24E529E3A6DF00C8D7F1 /* TestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +53,7 @@
 		AE29A3B329DCB4D200B32C77 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		AE29A3B529DCB66B00B32C77 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		AE29A3B929DCB72B00B32C77 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
+		AEDC24E529E3A6DF00C8D7F1 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +64,7 @@
 				AE29A3B229DC9DEA00B32C77 /* AlertToast in Frameworks */,
 				AED5EA5B29DF09BC00C0653D /* FirebaseAuth in Frameworks */,
 				AED5EA5D29DF09BC00C0653D /* FirebaseFirestore in Frameworks */,
+				AEDC24E429E39ADF00C8D7F1 /* FirebaseStorage in Frameworks */,
 				AED5EA5F29DF09BC00C0653D /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -144,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				AE29A3A729DB32F800B32C77 /* MatchingView.swift */,
+				AEDC24E529E3A6DF00C8D7F1 /* TestView.swift */,
 			);
 			path = Matching;
 			sourceTree = "<group>";
@@ -202,6 +207,7 @@
 				AED5EA5A29DF09BC00C0653D /* FirebaseAuth */,
 				AED5EA5C29DF09BC00C0653D /* FirebaseFirestore */,
 				AED5EA5E29DF09BC00C0653D /* FirebaseFirestoreSwift */,
+				AEDC24E329E39ADF00C8D7F1 /* FirebaseStorage */,
 			);
 			productName = Naneungolae;
 			productReference = AE29A37B29DB2EDC00B32C77 /* Naneungolae.app */;
@@ -266,6 +272,7 @@
 				AE29A3A129DB321A00B32C77 /* AuthStore.swift in Sources */,
 				AE29A3A529DB324700B32C77 /* MainTabView.swift in Sources */,
 				AE29A3A829DB32F800B32C77 /* MatchingView.swift in Sources */,
+				AEDC24E629E3A6DF00C8D7F1 /* TestView.swift in Sources */,
 				AE29A3AC29DB4DAA00B32C77 /* WhaleView.swift in Sources */,
 				AE29A3AE29DB4DB700B32C77 /* MyPageView.swift in Sources */,
 				AE29A39A29DB311D00B32C77 /* Feed.swift in Sources */,
@@ -519,6 +526,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AED5EA5929DF09BC00C0653D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		AEDC24E329E39ADF00C8D7F1 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5EA5929DF09BC00C0653D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

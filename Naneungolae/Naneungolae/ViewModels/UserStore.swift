@@ -11,12 +11,12 @@ import SwiftUI
 import Firebase
 
 class UserStore: ObservableObject {
-    @Published var user: User?
+    @Published var user: User
     
     let database = Firestore.firestore()
     
     init(){
-       
+       user = User(id: "", email: "", nickname: "", totalNumberOfCompliments: 0)
     }
     
     func fetchUser(userEmail: String){

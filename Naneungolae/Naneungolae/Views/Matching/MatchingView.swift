@@ -9,6 +9,10 @@ import SwiftUI
 import PhotosUI
 
 struct MatchingView: View {
+    @EnvironmentObject var feedStore: FeedStore
+    @EnvironmentObject var userStore: UserStore
+    @EnvironmentObject var authStore: AuthStore
+
     // 새로운 포토스 피커
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedPhotosData: [Data] = []
@@ -111,6 +115,10 @@ struct MatchingView: View {
                         .autocapitalization(.none)
                     
                     Button {
+                        feedStore.addFeed(Feed(id: userStore.user.email, category: selectedKeyword, images: [], senderEmail: userStore.user.email, senderNickname: userStore.user.nickname, senderPost: complimentText, receiverNickname: "", receiverEmail: "", receiverPost: "", isdoneMatching: false, isdoneReply: false), images: selectedPhotosToUIImage())
+                        selectedItems = []
+                        selectedPhotosData = []
+                        complimentText = ""
                         
                     } label: {
                         Text("매칭 하기")
@@ -124,7 +132,7 @@ struct MatchingView: View {
                     .padding(.top, 10)
                     
                     NavigationLink {
-                        
+                        TestView()
                         
                     } label: {
                         Text("칭찬답글 하러가기")
@@ -152,7 +160,11 @@ struct MatchingView: View {
                 .scrollDisabled(true)
             }
         }
-        
+        .task {
+            feedStore.fetchFeed(userEmail: authStore.currentUser?.email ?? "")
+            userStore.fetchUser(userEmail: authStore.currentUser?.email ?? "")
+            print("\(userStore.user)")
+        }
     }
     
 }
