@@ -11,6 +11,8 @@ struct SignupView: View {
     @EnvironmentObject var authStore: AuthStore
     @EnvironmentObject var userStore: UserStore
     
+    @Environment(\.dismiss) private var dismiss
+    
     @State var email: String = ""
     @State var password: String = ""
     @State var nickname: String = ""
@@ -74,7 +76,7 @@ struct SignupView: View {
                         isNicknameValid = checkNicknameValid(nickname)
                         if isEmailValid, isPasswordValid, isNicknameValid {
                             authStore.registerUser(email: email, password: password, nickname: nickname)
-                            print("회원가입 됐다 마")
+                            dismiss()
                         }
                     } label: {
                         Text("회원가입")

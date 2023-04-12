@@ -25,9 +25,10 @@ class AuthStore: ObservableObject {
                 print("Error: \(error.localizedDescription)")
             }
             
-            guard (authResult?.user) != nil else { return }
+            guard let user = authResult?.user else { return }
             
             self.userStore.createUser(User(id: email, email: email, nickname: nickname, totalNumberOfCompliments: 0))
+            self.currentUser = user
             self.isLogin = true
         }
     }

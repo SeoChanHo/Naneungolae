@@ -42,6 +42,11 @@ struct MatchingView: View {
                         .bold()
                         .padding()
                     Spacer()
+                    Image(systemName: "bell.fill")
+                        .foregroundColor(.white)
+                        .font(.title3)
+                        .bold()
+                        .padding()
                     
                 }
                 ScrollView {
