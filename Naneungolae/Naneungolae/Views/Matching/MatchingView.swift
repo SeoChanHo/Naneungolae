@@ -20,6 +20,8 @@ struct MatchingView: View {
     var keywords: [String] = ["응원", "위로", "자신감", "목표달성", "인정", "축하"]
     @State var selectedKeyword: String = "응원"
     @State var complimentText: String = ""
+    @State var isShowingNotificationList: Bool = false
+    @State var isNotification: Bool = false
     
     func selectedPhotosToUIImage() -> [UIImage] {
         var uiImages = [UIImage]()
@@ -42,12 +44,31 @@ struct MatchingView: View {
                         .bold()
                         .padding()
                     Spacer()
-                    Image(systemName: "bell.fill")
-                        .foregroundColor(.white)
-                        .font(.title3)
-                        .bold()
-                        .padding()
-                    
+                    ZStack {
+                        Button {
+                            isShowingNotificationList.toggle()
+                        } label: {
+                            Image(systemName: "bell.fill")
+                                .foregroundColor(.white)
+                                .font(.title3)
+                                .bold()
+                                .padding()
+                        }
+                        
+                        if isShowingNotificationList {
+                            List {
+                                ForEach(feedStore.notificationFeed) { feed in
+                                    if feed.isdoneMatching && !feed.isdoneReply {
+                                        Text("매칭 완료")
+                                    } else if feed.isdoneMatching && feed.isdoneReply {
+                                        Text("칭찬 완료")
+                                    }
+                                }
+                            }
+                            .frame(width: 100, height: 100)
+                            .offset(y: 100)
+                        }
+                    }
                 }
                 ScrollView {
                     HStack {
@@ -90,7 +111,6 @@ struct MatchingView: View {
                                 }
                             }
                         }
-                        .scrollDisabled(false)
                         Spacer()
                     }
                     .padding(.vertical, 10)
@@ -120,7 +140,10 @@ struct MatchingView: View {
                         .autocapitalization(.none)
                     
                     Button {
+//                        let feedID = UUID().uuidString
                         feedStore.addFeed(Feed(id: userStore.user.email, category: selectedKeyword, images: [], senderEmail: userStore.user.email, senderNickname: userStore.user.nickname, senderPost: complimentText, receiverNickname: "", receiverEmail: "", receiverPost: "", isdoneMatching: false, isdoneReply: false), images: selectedPhotosToUIImage())
+                        
+//                        feedStore.matchWhenAddFeed(userEmail: userStore.user.email, feedID: feedID)
                         selectedItems = []
                         selectedPhotosData = []
                         complimentText = ""
@@ -137,7 +160,7 @@ struct MatchingView: View {
                     .padding(.top, 10)
                     
                     NavigationLink {
-                        TestView()
+                        writeComplimentView()
                         
                     } label: {
                         Text("칭찬답글 하러가기")
@@ -150,7 +173,7 @@ struct MatchingView: View {
                     }
                     
                     NavigationLink {
-                        
+                        TestView()
                     } label: {
                         Text("칭찬 받은 글 보러가기")
                             .font(.system(size: 17))
@@ -166,9 +189,8 @@ struct MatchingView: View {
             }
         }
         .task {
-            feedStore.fetchFeed(userEmail: authStore.currentUser?.email ?? "")
             userStore.fetchUser(userEmail: authStore.currentUser?.email ?? "")
-            print("\(userStore.user)")
+            feedStore.notifyMatchingComplete(userEmail: authStore.currentUser?.email ?? "")
         }
     }
     

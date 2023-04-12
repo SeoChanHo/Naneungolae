@@ -26,6 +26,7 @@
 		AE29A3B429DCB4D200B32C77 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE29A3B329DCB4D200B32C77 /* SettingView.swift */; };
 		AE29A3B629DCB66B00B32C77 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE29A3B529DCB66B00B32C77 /* LoginView.swift */; };
 		AE29A3BA29DCB72B00B32C77 /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE29A3B929DCB72B00B32C77 /* SignupView.swift */; };
+		AE2A775D29E684360028DBD6 /* writeComplimentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2A775C29E684360028DBD6 /* writeComplimentView.swift */; };
 		AED5EA5B29DF09BC00C0653D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5A29DF09BC00C0653D /* FirebaseAuth */; };
 		AED5EA5D29DF09BC00C0653D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5C29DF09BC00C0653D /* FirebaseFirestore */; };
 		AED5EA5F29DF09BC00C0653D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5E29DF09BC00C0653D /* FirebaseFirestoreSwift */; };
@@ -53,6 +54,7 @@
 		AE29A3B329DCB4D200B32C77 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		AE29A3B529DCB66B00B32C77 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		AE29A3B929DCB72B00B32C77 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
+		AE2A775C29E684360028DBD6 /* writeComplimentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = writeComplimentView.swift; sourceTree = "<group>"; };
 		AEDC24E529E3A6DF00C8D7F1 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -149,6 +151,7 @@
 			children = (
 				AE29A3A729DB32F800B32C77 /* MatchingView.swift */,
 				AEDC24E529E3A6DF00C8D7F1 /* TestView.swift */,
+				AE2A775C29E684360028DBD6 /* writeComplimentView.swift */,
 			);
 			path = Matching;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 			files = (
 				AE29A38129DB2EDC00B32C77 /* ContentView.swift in Sources */,
 				AE29A3A129DB321A00B32C77 /* AuthStore.swift in Sources */,
+				AE2A775D29E684360028DBD6 /* writeComplimentView.swift in Sources */,
 				AE29A3A529DB324700B32C77 /* MainTabView.swift in Sources */,
 				AE29A3A829DB32F800B32C77 /* MatchingView.swift in Sources */,
 				AEDC24E629E3A6DF00C8D7F1 /* TestView.swift in Sources */,

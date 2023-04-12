@@ -9,11 +9,12 @@ import SwiftUI
 
 struct TestView: View {
     @EnvironmentObject var feedStore: FeedStore
+    @EnvironmentObject var userStore: UserStore
     
     var body: some View {
         VStack {
-            List {
-                ForEach(feedStore.feed) { feed in
+            ScrollView {
+                ForEach(feedStore.completedFeed) { feed in
                     VStack {
                         Text(feed.id)
                         Text(feed.category)
@@ -28,12 +29,18 @@ struct TestView: View {
                                 .frame(width: 200)
                         }
                     }
+                    .padding(.bottom, 20)
+                    VStack {
+                        Text(feed.receiverEmail)
+                        Text(feed.receiverNickname)
+                        Text(feed.receiverPost)
+                    }
                 }
             }
             
         }
         .task {
-//            feedStore.fetchFeed()
+            feedStore.fetchCompletedFeed(userEmail: userStore.user.email)
         }
     }
 }
