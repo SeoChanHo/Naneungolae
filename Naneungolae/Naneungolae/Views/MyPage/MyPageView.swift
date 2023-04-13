@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MyPageView: View {
+    @EnvironmentObject var feedStore: FeedStore
+    @EnvironmentObject var userStore: UserStore
     var body: some View {
         VStack {
             HStack {
@@ -28,6 +30,21 @@ struct MyPageView: View {
                 }
             }
             .background(Color("mainColor"))
+            .padding(.bottom, 20)
+            
+            ScrollView {
+                ForEach(feedStore.myPageFeed) { feed in
+                    VStack {
+                        Text("내가 쓴 글 : \(feed.senderPost)")
+                        Text("상대 닉네임 : \(feed.receiverNickname)")
+                        Text("상대가 쓴 글 : \(feed.receiverPost)")
+                        
+                    }
+                }
+            }
+        }
+        .task {
+            feedStore.fetchCompletedFeedInMyPage(userEmail: userStore.user.email)
         }
     }
 }

@@ -15,6 +15,9 @@ struct writeComplimentView: View {
     @State var complimentText: String = ""
     @State var isShowingToast: Bool = false
     var body: some View {
+        ZStack {
+            Color("mainColor")
+                .edgesIgnoringSafeArea(.top)
             ScrollView {
                 ForEach(feedStore.matchedOpponentFeed) { feed in
                     VStack {
@@ -48,7 +51,7 @@ struct writeComplimentView: View {
                             .autocapitalization(.none)
                         
                         Button {
-                            feedStore.updateOpponentFeed(feedID: feed.id, user: userStore.user, post: complimentText)
+                            feedStore.updateOpponentFeed(feedID: feed.id, matchedFeedID: feed.matchedFeedID, text: complimentText)
                             feedStore.fetchMatchedOpponentFeed(userEmail: userStore.user.email)
                             isShowingToast.toggle()
                             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
@@ -57,7 +60,7 @@ struct writeComplimentView: View {
                         } label: {
                             Text("칭찬글 작성 완료")
                         }
-
+                        
                         Divider()
                     }
                 }
@@ -68,6 +71,7 @@ struct writeComplimentView: View {
             .toast(isPresenting: $isShowingToast){
                 AlertToast(type: .complete(Color("mainColor")), title: "칭찬 작성 완료!")
             }
+        }
     }
 }
 

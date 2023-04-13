@@ -30,6 +30,12 @@ struct Feed: Codable, Identifiable {
     let receiverEmail: String
     let receiverPost: String
     
-    var isdoneMatching: Bool
-    var isdoneReply: Bool
+    let isdoneMatching: Bool
+    let isdoneReply: Bool
+    
+    // 이 Feed에 매칭된 글에 답장을 했는지 여부
+    let isdoneReplyMatchedFeed: Bool
+    
+    // 매칭된 두 Feed에 같은 matchingID를 저장해서 1대1로 연결해준다
+    let matchedFeedID: String
 }

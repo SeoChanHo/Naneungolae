@@ -56,17 +56,23 @@ struct MatchingView: View {
                         }
                         
                         if isShowingNotificationList {
-                            List {
+                            ScrollView {
                                 ForEach(feedStore.notificationFeed) { feed in
                                     if feed.isdoneMatching && !feed.isdoneReply {
                                         Text("매칭 완료")
                                     } else if feed.isdoneMatching && feed.isdoneReply {
-                                        Text("칭찬 완료")
+                                        NavigationLink {
+                                            MyPageView()
+                                        } label: {
+                                            Text("칭찬 완료")
+                                        }
                                     }
                                 }
                             }
                             .frame(width: 100, height: 100)
+                            .background(Color.white)
                             .offset(y: 100)
+                            .padding()
                         }
                     }
                 }
@@ -140,7 +146,24 @@ struct MatchingView: View {
                         .autocapitalization(.none)
                     
                     Button {
-                        feedStore.addFeed(Feed(id: userStore.user.email, category: selectedKeyword, images: [], senderEmail: userStore.user.email, senderNickname: userStore.user.nickname, senderPost: complimentText, receiverNickname: "", receiverEmail: "", receiverPost: "", isdoneMatching: false, isdoneReply: false), images: selectedPhotosToUIImage())
+                        feedStore.addFeed(
+                            Feed(
+                                id: userStore.user.email,
+                                category: selectedKeyword,
+                                images: [],
+                                senderEmail: userStore.user.email,
+                                senderNickname: userStore.user.nickname,
+                                senderPost: complimentText,
+                                receiverNickname: "",
+                                receiverEmail: "",
+                                receiverPost: "",
+                                isdoneMatching: false,
+                                isdoneReply: false,
+                                isdoneReplyMatchedFeed: false,
+                                matchedFeedID: ""
+                            ),
+                            images: selectedPhotosToUIImage()
+                        )
                         
                         selectedItems = []
                         selectedPhotosData = []
