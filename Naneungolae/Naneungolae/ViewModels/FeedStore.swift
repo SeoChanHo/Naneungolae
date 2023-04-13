@@ -17,6 +17,7 @@ class FeedStore: ObservableObject {
     @Published var completedFeed: [Feed] = []
     @Published var notificationFeed: [Feed] = []
     @Published var imageDict = [String: UIImage]()
+    @Published var test: String = ""
     
     let database = Firestore.firestore()
     let storage = Storage.storage()
@@ -134,9 +135,10 @@ class FeedStore: ObservableObject {
                       "isdoneMatching" : feed.isdoneMatching,
                       "isdoneReply" : feed.isdoneReply
                      ])
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+        test = feedID
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
             self.matchWhenAddFeed(userEmail: feed.senderEmail, feedID: feedID)
-        }
+//        }
     }
     
     // 피드 작성을 완료했을때 서버에 매칭 대기중인 글이 있다면 매칭해주는 함수
@@ -168,24 +170,26 @@ class FeedStore: ObservableObject {
             .getDocuments { (snapshot, error) in
 
                 if let error {
-                    print("Error: \(error.localizedDescription)")
+                    print("매칭 에러 Error: \(error.localizedDescription)")
                 }
-
+                
                 if let snapshot {
-                    let firstDocument = snapshot.documents[0]
-                    self.database.collection("Feed").document(firstDocument.documentID).updateData(
-                        ["isdoneMatching" : true]
-                    ) { err in
-                        if let err {
-                            print("Error updating document: \(err)")
+                    if !snapshot.documents.isEmpty {
+                        let firstDocument = snapshot.documents[0]
+                        self.database.collection("Feed").document(firstDocument.documentID).updateData(
+                            ["isdoneMatching" : true]
+                        ) { err in
+                            if let err {
+                                print("이즈돈매칭 상대 에러Error updating document: \(err)")
+                            }
                         }
-                    }
-
-                    self.database.collection("Feed").document(feedID).updateData(
-                        ["isdoneMatching" : true]
-                    ) { err in
-                        if let err {
-                            print("Error updating document: \(err)")
+                        
+                        self.database.collection("Feed").document(feedID).updateData(
+                            ["isdoneMatching" : true]
+                        ) { err in
+                            if let err {
+                                print("이즈돈매칭 본인 에러Error updating document: \(err)")
+                            }
                         }
                     }
                 }

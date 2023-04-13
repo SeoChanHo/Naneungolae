@@ -140,10 +140,8 @@ struct MatchingView: View {
                         .autocapitalization(.none)
                     
                     Button {
-//                        let feedID = UUID().uuidString
                         feedStore.addFeed(Feed(id: userStore.user.email, category: selectedKeyword, images: [], senderEmail: userStore.user.email, senderNickname: userStore.user.nickname, senderPost: complimentText, receiverNickname: "", receiverEmail: "", receiverPost: "", isdoneMatching: false, isdoneReply: false), images: selectedPhotosToUIImage())
                         
-//                        feedStore.matchWhenAddFeed(userEmail: userStore.user.email, feedID: feedID)
                         selectedItems = []
                         selectedPhotosData = []
                         complimentText = ""
