@@ -13,12 +13,19 @@ struct SignupView: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    @State var email: String = ""
-    @State var password: String = ""
-    @State var nickname: String = ""
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var nickname: String = ""
     @State private var isEmailValid: Bool = true
     @State private var isPasswordValid: Bool = true
     @State private var isNicknameValid: Bool = true
+    @FocusState private var focusedField: Field?
+    
+    enum Field: Hashable {
+        case email
+        case password
+        case nickname
+    }
     
     var body: some View {
         ZStack {
@@ -29,11 +36,15 @@ struct SignupView: View {
                     VStack(alignment:.leading) {
                         Text("이메일")
                         TextField("이메일을 입력해주세요", text: $email)
-                        .autocapitalization(.none)
-                        .keyboardType(.emailAddress)
-                        .frame(width: UIScreen.main.bounds.width - 100, height: 12)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 12).strokeBorder())
+                            .autocapitalization(.none)
+                            .keyboardType(.emailAddress)
+                            .frame(width: UIScreen.main.bounds.width - 100, height: 12)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 12).strokeBorder())
+                            .focused($focusedField, equals: .email)
+                            .onSubmit {
+                                focusedField = .password
+                            }
                         
                         if !isEmailValid {
                             Text("Email is Not Valid")
@@ -48,6 +59,10 @@ struct SignupView: View {
                             .frame(width: UIScreen.main.bounds.width - 100, height: 12)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 12).strokeBorder())
+                            .focused($focusedField, equals: .password)
+                            .onSubmit {
+                                focusedField = .nickname
+                            }
                         
                         if !isPasswordValid {
                             Text("Password is Not Valid")
@@ -55,13 +70,32 @@ struct SignupView: View {
                                 .foregroundColor(Color.red)
                         }
                     }
-
+                    
                     VStack(alignment:.leading) {
                         Text("닉네임")
                         TextField("10 글자 이하 닉네임을 입력해주세요", text: $nickname)
+                            .autocapitalization(.none)
                             .frame(width: UIScreen.main.bounds.width - 100, height: 12)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 12).strokeBorder())
+                            .focused($focusedField, equals: .nickname)
+                            .onSubmit {
+                                if email.isEmpty {
+                                    focusedField = .email
+                                } else if password.isEmpty {
+                                    focusedField = .password
+                                } else if nickname.isEmpty {
+                                    focusedField = .nickname
+                                } else {
+                                    isEmailValid = checkEmailValid(email)
+                                    isPasswordValid = checkPasswordValid(password)
+                                    isNicknameValid = checkNicknameValid(nickname)
+                                    if isEmailValid, isPasswordValid, isNicknameValid {
+                                        authStore.registerUser(email: email, password: password, nickname: nickname)
+                                        dismiss()
+                                    }
+                                }
+                            }
                         
                         if !isNicknameValid {
                             Text("Nickname is Not Valid")
@@ -71,12 +105,20 @@ struct SignupView: View {
                     }
                     
                     Button {
-                        isEmailValid = checkEmailValid(email)
-                        isPasswordValid = checkPasswordValid(password)
-                        isNicknameValid = checkNicknameValid(nickname)
-                        if isEmailValid, isPasswordValid, isNicknameValid {
-                            authStore.registerUser(email: email, password: password, nickname: nickname)
-                            dismiss()
+                        if email.isEmpty {
+                            focusedField = .email
+                        } else if password.isEmpty {
+                            focusedField = .password
+                        } else if nickname.isEmpty {
+                            focusedField = .nickname
+                        } else {
+                            isEmailValid = checkEmailValid(email)
+                            isPasswordValid = checkPasswordValid(password)
+                            isNicknameValid = checkNicknameValid(nickname)
+                            if isEmailValid, isPasswordValid, isNicknameValid {
+                                authStore.registerUser(email: email, password: password, nickname: nickname)
+                                dismiss()
+                            }
                         }
                     } label: {
                         Text("회원가입")

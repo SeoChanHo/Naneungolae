@@ -12,6 +12,12 @@ struct LoginView: View {
     
     @State private var email: String = "test@test.com"
     @State private var password: String = "123123"
+    @FocusState private var focusedField: Field?
+    
+    enum Field: Hashable {
+        case email
+        case password
+    }
     
     var body: some View {
         ZStack {
@@ -34,6 +40,10 @@ struct LoginView: View {
                             .frame(width: UIScreen.main.bounds.width - 100, height: 12)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 12).strokeBorder())
+                            .focused($focusedField, equals: .email)
+                            .onSubmit {
+                                focusedField = .password
+                            }
                         
                     }
                     
@@ -42,12 +52,28 @@ struct LoginView: View {
                             .frame(width: UIScreen.main.bounds.width - 100, height: 12)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 12).strokeBorder())
+                            .focused($focusedField, equals: .password)
+                            .onSubmit {
+                                if email.isEmpty {
+                                    focusedField = .email
+                                } else if password.isEmpty {
+                                    focusedField = .password
+                                } else {
+                                    authStore.signIn(email: email, password: password)
+                                }
+                            }
                     }
                     
                     HStack(spacing: 40) {
                         VStack {
                             Button {
-                                authStore.signIn(email: email, password: password)
+                                if email.isEmpty {
+                                    focusedField = .email
+                                } else if password.isEmpty {
+                                    focusedField = .password
+                                } else {
+                                    authStore.signIn(email: email, password: password)
+                                }
                             } label: {
                                 Text("로그인")
                                     .font(.title3)
