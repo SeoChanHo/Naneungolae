@@ -116,6 +116,9 @@ struct LoginView: View {
                 
             }
         }
+        .onTapGesture {
+            endTextEditing()
+        }
     }
 }
 

@@ -137,6 +137,10 @@ struct SignupView: View {
                 .padding(.top, 30)
             }
         }
+        .onTapGesture {
+            endTextEditing()
+        }
+
     }
     
     func checkEmailValid(_ string: String) -> Bool {

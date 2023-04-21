@@ -27,6 +27,7 @@
 		AE29A3B629DCB66B00B32C77 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE29A3B529DCB66B00B32C77 /* LoginView.swift */; };
 		AE29A3BA29DCB72B00B32C77 /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE29A3B929DCB72B00B32C77 /* SignupView.swift */; };
 		AE2A775D29E684360028DBD6 /* writeComplimentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2A775C29E684360028DBD6 /* writeComplimentView.swift */; };
+		AE2A776129E93F880028DBD6 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2A776029E93F880028DBD6 /* View+.swift */; };
 		AED5EA5B29DF09BC00C0653D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5A29DF09BC00C0653D /* FirebaseAuth */; };
 		AED5EA5D29DF09BC00C0653D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5C29DF09BC00C0653D /* FirebaseFirestore */; };
 		AED5EA5F29DF09BC00C0653D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5E29DF09BC00C0653D /* FirebaseFirestoreSwift */; };
@@ -55,6 +56,7 @@
 		AE29A3B529DCB66B00B32C77 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		AE29A3B929DCB72B00B32C77 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		AE2A775C29E684360028DBD6 /* writeComplimentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = writeComplimentView.swift; sourceTree = "<group>"; };
+		AE2A776029E93F880028DBD6 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		AEDC24E529E3A6DF00C8D7F1 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,6 +101,7 @@
 				AE29A39B29DB313200B32C77 /* Models */,
 				AE29A39C29DB31B700B32C77 /* Views */,
 				AE29A39D29DB31C200B32C77 /* ViewModels */,
+				AE2A775F29E93F640028DBD6 /* Extension */,
 				AE29A38229DB2EDD00B32C77 /* Assets.xcassets */,
 				AE29A38C29DB2F6000B32C77 /* GoogleService-Info.plist */,
 				AE29A38429DB2EDD00B32C77 /* Preview Content */,
@@ -180,6 +183,14 @@
 				AE29A3B929DCB72B00B32C77 /* SignupView.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		AE2A775F29E93F640028DBD6 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				AE2A776029E93F880028DBD6 /* View+.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		AEDDC4E229DCDC0700661D03 /* Frameworks */ = {
@@ -275,6 +286,7 @@
 				AE29A3A129DB321A00B32C77 /* AuthStore.swift in Sources */,
 				AE2A775D29E684360028DBD6 /* writeComplimentView.swift in Sources */,
 				AE29A3A529DB324700B32C77 /* MainTabView.swift in Sources */,
+				AE2A776129E93F880028DBD6 /* View+.swift in Sources */,
 				AE29A3A829DB32F800B32C77 /* MatchingView.swift in Sources */,
 				AEDC24E629E3A6DF00C8D7F1 /* TestView.swift in Sources */,
 				AE29A3AC29DB4DAA00B32C77 /* WhaleView.swift in Sources */,

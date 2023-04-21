@@ -18,6 +18,13 @@ struct ContentView: View {
                 } else {
                     LoginView()
                 }
+                /*
+                if let authStore.currentUser {
+                    // 뷰
+                } else {
+                    // 로그인뷰
+                }
+                 */
             }
         }
     }

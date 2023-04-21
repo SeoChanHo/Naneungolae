@@ -13,11 +13,11 @@ struct Feed: Codable, Identifiable {
     let images: [String]
     var createdAt: Date = Date()
     
-    var dateText: DateFormatter {
+    var dateText: String {
         let format = DateFormatter()
         format.locale = Locale(identifier: "ko_KR")
-        format.dateFormat = "YYYY년 M월 d일"
-        return format
+        format.dateFormat = "M월 d일 HH:mm"
+        return format.string(from: createdAt)
     }
     
     // 발신자
@@ -36,6 +36,6 @@ struct Feed: Codable, Identifiable {
     // 이 Feed에 매칭된 글에 답장을 했는지 여부
     let isdoneReplyMatchedFeed: Bool
     
-    // 매칭된 두 Feed에 같은 matchingID를 저장해서 1대1로 연결해준다
+    // 매칭된 Feed의 ID를 저장하는 프로퍼티
     let matchedFeedID: String
 }

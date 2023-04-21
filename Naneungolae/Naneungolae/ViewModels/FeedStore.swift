@@ -219,7 +219,7 @@ class FeedStore: ObservableObject {
     }
     
     // 매칭된 나의 글을 가져오는 함수
-    func fetchMyMatchedFeed(userEmail: String){
+    func fetchMyMatchedFeed(userEmail: String) {
         database.collection("Feed")
             .whereField("senderEmail", isEqualTo: userEmail)
             .whereField("isdoneMatching", isEqualTo: true)
@@ -232,6 +232,8 @@ class FeedStore: ObservableObject {
                         let docData = document.data()
                         let category: String = docData["category"] as? String ?? ""
                         let images: [String] = docData["images"] as? [String] ?? []
+                        let timeStampData: Timestamp = docData["createdAt"] as? Timestamp ?? Timestamp()
+                        let createdAt : Date = timeStampData.dateValue()
                         let senderEmail: String = docData["senderEmail"] as? String ?? ""
                         let senderNickname: String = docData["senderNickname"] as? String ?? ""
                         let senderPost: String = docData["senderPost"] as? String ?? ""
@@ -248,6 +250,7 @@ class FeedStore: ObservableObject {
                                 id: id,
                                 category: category,
                                 images: images,
+                                createdAt: createdAt,
                                 senderEmail: senderEmail,
                                 senderNickname: senderNickname,
                                 senderPost: senderPost,
@@ -282,6 +285,8 @@ class FeedStore: ObservableObject {
                         let docData = document.data()
                         let category: String = docData["category"] as? String ?? ""
                         let images: [String] = docData["images"] as? [String] ?? []
+                        let timeStampData: Timestamp = docData["createdAt"] as? Timestamp ?? Timestamp()
+                        let createdAt : Date = timeStampData.dateValue()
                         let senderEmail: String = docData["senderEmail"] as? String ?? ""
                         let senderNickname: String = docData["senderNickname"] as? String ?? ""
                         let senderPost: String = docData["senderPost"] as? String ?? ""
@@ -298,6 +303,7 @@ class FeedStore: ObservableObject {
                                 id: id,
                                 category: category,
                                 images: images,
+                                createdAt: createdAt,
                                 senderEmail: senderEmail,
                                 senderNickname: senderNickname,
                                 senderPost: senderPost,
@@ -310,6 +316,7 @@ class FeedStore: ObservableObject {
                                 matchedFeedID: matchedFeedID
                             )
                         )
+                        self.matchedOpponentFeed.sort(by: { $0.createdAt < $1.createdAt })
                         self.fetchImage(postID: id, userEmail: senderEmail, imageNames: images)
                     }
                 }

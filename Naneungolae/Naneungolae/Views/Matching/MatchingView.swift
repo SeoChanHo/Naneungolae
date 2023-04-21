@@ -172,6 +172,7 @@ struct MatchingView: View {
                     } label: {
                         Text("매칭 하기")
                             .font(.system(size: 17))
+                            .bold()
                             .foregroundColor(Color.white)
                             .frame(width: UIScreen.main.bounds.width - 100, height: 12)
                             .padding()
@@ -186,6 +187,7 @@ struct MatchingView: View {
                     } label: {
                         Text("칭찬답글 하러가기")
                             .font(.system(size: 17))
+                            .bold()
                             .foregroundColor(Color.white)
                             .frame(width: UIScreen.main.bounds.width - 100, height: 12)
                             .padding()
@@ -198,6 +200,7 @@ struct MatchingView: View {
                     } label: {
                         Text("칭찬 받은 글 보러가기")
                             .font(.system(size: 17))
+                            .bold()
                             .foregroundColor(Color.white)
                             .frame(width: UIScreen.main.bounds.width - 100, height: 12)
                             .padding()
@@ -208,6 +211,9 @@ struct MatchingView: View {
                 }
                 .scrollDisabled(true)
             }
+        }
+        .onTapGesture {
+            endTextEditing()
         }
         .task {
             userStore.fetchUser(userEmail: authStore.currentUser?.email ?? "")
