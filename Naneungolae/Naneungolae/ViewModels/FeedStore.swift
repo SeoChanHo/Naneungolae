@@ -378,7 +378,7 @@ class FeedStore: ObservableObject {
     }
     
     // 칭찬글 작성하고 상대방 글 수정하는 함수
-    func updateOpponentFeed(feedID: String, matchedFeedID: String, text: String) {
+    func updateOpponentFeed(userEmail: String, feedID: String, matchedFeedID: String, text: String) {
         database.collection("Feed")
             .document(feedID)
             .updateData(
@@ -403,6 +403,7 @@ class FeedStore: ObservableObject {
                     print("Document successfully updated")
                 }
             }
+        fetchMatchedOpponentFeed(userEmail: userEmail)
     }
     
     // 나의 매칭 및 작성 완료된 글을 가져오는 함수

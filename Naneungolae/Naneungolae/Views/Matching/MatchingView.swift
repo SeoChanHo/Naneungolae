@@ -122,11 +122,12 @@ struct MatchingView: View {
                     .padding(.vertical, 10)
                     
                     HStack {
-                        Text("키워드를 선택하세요")
-                            .foregroundColor(.white)
-                        
                         Spacer()
                         
+                        Text("받고 싶은 칭찬 키워드를 선택하세요")
+                            .foregroundColor(.white)
+                        Spacer()
+
                         Picker("키워드를 선택하세요", selection: $selectedKeyword) {
                             
                             ForEach(keywords, id: \.self) { keyword in
@@ -135,10 +136,15 @@ struct MatchingView: View {
                             }
                         }
                         .pickerStyle(.menu)
-                        .tint(.white)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(Color("buttonColor")))
+                        .frame(width: 110)
+                        .tint(Color.white)
                         .fontWeight(.bold)
-                        .zIndex(2)
+                        
+                        Spacer()
                     }
+                    .bold()
+                    
                     TextEditor(text: $complimentText)
                         .frame(width: 350, height: 200, alignment: .top)
                         .background(Color.white)

@@ -25,11 +25,10 @@ struct writeComplimentView: View {
             } else {
                 ScrollView {
                     ForEach(feedStore.matchedOpponentFeed) { feed in
-                        matchedOpponentFeedListCell(feed: feed)
+                        matchedOpponentFeedListCell(isShowingToast: $isShowingToast, feed: feed)
                     }
                 }
             }
-            
         }
         .task {
             feedStore.fetchMatchedOpponentFeed(userEmail: userStore.user.email)
@@ -50,8 +49,10 @@ struct writeComplimentView: View {
 }
 
 struct matchedOpponentFeedListCell: View {
+    @EnvironmentObject var userStore : UserStore
     @EnvironmentObject var feedStore : FeedStore
     @State private var complimentText: String = ""
+    @Binding var isShowingToast: Bool
     let feed: Feed
     
     var body: some View {
@@ -69,24 +70,31 @@ struct matchedOpponentFeedListCell: View {
             }
             .padding()
             VStack {
-                GeometryReader { proxy in
-                    TabView {
-                        ForEach(feed.images, id: \.self) { imageName in
-                            Rectangle()
-                                .foregroundColor(Color("mainColor"))
-                                .opacity(0.3)
-                                .cornerRadius(10)
-                                .overlay {
-                                    Image(uiImage: feedStore.imageDict[imageName] ?? UIImage())
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .cornerRadius(10)
-                                }
-                                .padding(.horizontal)
+                if feed.images.isEmpty {
+                    Image("alertWhale")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.horizontal)
+                } else {
+                    GeometryReader { proxy in
+                        TabView {
+                            ForEach(feed.images, id: \.self) { imageName in
+                                Rectangle()
+                                    .foregroundColor(.gray)
+                                    .opacity(0.1)
+                                    .cornerRadius(10)
+                                    .overlay {
+                                        Image(uiImage: feedStore.imageDict[imageName] ?? UIImage())
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .cornerRadius(10)
+                                    }
+                                    .padding(.horizontal)
+                            }
                         }
+                        .tabViewStyle(PageTabViewStyle())
+                        .frame(width: proxy.size.width, height: proxy.size.height)
                     }
-                    .tabViewStyle(PageTabViewStyle())
-                    .frame(width: proxy.size.width, height: proxy.size.height)
                 }
             }
             .frame(width: UIScreen.main.bounds.width, height: 300)
@@ -109,14 +117,18 @@ struct matchedOpponentFeedListCell: View {
             .padding(.vertical, 5)
             
             TextEditor(text: $complimentText)
-                .frame(width: 350, height: 200, alignment: .top)
+                .frame(width: 350, height: 150, alignment: .top)
                 .border(.black, width: 1)
                 .padding(.horizontal, 10)
                 .autocapitalization(.none)
             
             
             Button {
-                feedStore.updateOpponentFeed(feedID: feed.id, matchedFeedID: feed.matchedFeedID, text: complimentText)
+                feedStore.updateOpponentFeed(userEmail: userStore.user.email ,feedID: feed.id, matchedFeedID: feed.matchedFeedID, text: complimentText)
+                isShowingToast.toggle()
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) {
+                    isShowingToast.toggle()
+                }
             } label: {
                 Text("칭찬글 작성 완료")
                     .font(.system(size: 17))
