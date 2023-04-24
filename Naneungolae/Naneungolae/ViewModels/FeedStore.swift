@@ -11,12 +11,12 @@ import FirebaseStorage
 import SwiftUI
 
 class FeedStore: ObservableObject {
-    @Published var feed: [Feed] = []
-    @Published var matchedFeed: [Feed] = []
-    @Published var matchedOpponentFeed: [Feed] = []
-    @Published var completedFeed: [Feed] = []
-    @Published var notificationFeed: [Feed] = []
+    // storage에서 Feed에 저장된 imageName(String Type)에 맞는 이미지를 불러와 담는 프로퍼티
     @Published var imageDict = [String: UIImage]()
+    // 매칭된 상대방 Feed들을 담는 프로퍼티
+    @Published var matchedOpponentFeed: [Feed] = []
+    // 알림 피드
+    @Published var notificationFeed: [Feed] = []
     // 매칭 가능한 Feed들 담는 프로퍼티 (시간순 정렬, 상대 닉네임, 이메일 가져오는데 사용)
     @Published var matchableFeed: [Feed] = []
     // 마이페이지 완료된 Feed
@@ -27,20 +27,27 @@ class FeedStore: ObservableObject {
     let database = Firestore.firestore()
     let storage = Storage.storage()
     
-    init(){
-        feed = []
-        matchedFeed = []
-        matchedOpponentFeed = []
-        completedFeed = []
-        notificationFeed = []
-        imageDict = [:]
+    //MARK: - 스토리지에 이미지 업로드하는 함수
+    func uploadImage(image: UIImage, name: String) {
+        let storageRef = storage.reference().child("images/\(name)")
+        let data = image.jpegData(compressionQuality: 0.1)
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpg"
         
-        matchableFeed = []
-        
-        myPageFeed = []
+        if let data = data {
+            storageRef.putData(data, metadata: metadata) { (metadata, error) in
+                if let error = error {
+                    print("err when uploading jpg\n\(error)")
+                }
+                
+                if let metadata = metadata {
+                    print("metadata: \(metadata)")
+                }
+            }
+        }
     }
     
-    // 스토리지에 저장된 이미지를 불러와 ImageDict에 저장하는 함수
+    //MARK: - 스토리지에 저장된 이미지를 불러와 ImageDict에 저장하는 함수
     func fetchImage(postID: String, userEmail: String, imageNames: [String]) {
         for imageName in imageNames {
             let ref = storage.reference().child("images/\(postID)|\(userEmail)/\(imageName)")
@@ -57,7 +64,7 @@ class FeedStore: ObservableObject {
         }
     }
     
-    // 피드 작성 완료시 피드 업로드 함수
+    //MARK: - 피드 작성 완료시 피드 업로드 함수
     func addFeed(_ feed: Feed, images: [UIImage]) {
         let feedID = UUID().uuidString
         
@@ -96,7 +103,7 @@ class FeedStore: ObservableObject {
         )
     }
     
-    // 피드 작성을 완료했을때 서버에 매칭 대기중인 글이 있다면 매칭해주는 함수
+    //MARK: - 피드 작성을 완료했을때 서버에 매칭 대기중인 글이 있다면 매칭해주는 함수
     func matchWhenAddFeed(senderNickname: String, senderEmail: String, feedID: String) {
         database.collection("Feed")
             .whereField("senderEmail", isNotEqualTo: senderEmail)
@@ -179,27 +186,7 @@ class FeedStore: ObservableObject {
             }
     }
     
-    // 스토리지에 이미지 업로드하는 함수
-    func uploadImage(image: UIImage, name: String) {
-        let storageRef = storage.reference().child("images/\(name)")
-        let data = image.jpegData(compressionQuality: 0.1)
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpg"
-        
-        if let data = data {
-            storageRef.putData(data, metadata: metadata) { (metadata, error) in
-                if let error = error {
-                    print("err when uploading jpg\n\(error)")
-                }
-                
-                if let metadata = metadata {
-                    print("metadata: \(metadata)")
-                }
-            }
-        }
-    }
-    
-    // 피드 지우는 함수
+     //MARK: -  피드 지우는 함수
     func removeFeed(_ feed: Feed){
         database.collection("Feed")
             .document(feed.id)
@@ -220,58 +207,7 @@ class FeedStore: ObservableObject {
         }
     }
     
-    // 매칭된 나의 글을 가져오는 함수
-    func fetchMyMatchedFeed(userEmail: String) {
-        database.collection("Feed")
-            .whereField("senderEmail", isEqualTo: userEmail)
-            .whereField("isdoneMatching", isEqualTo: true)
-            .getDocuments { (snapshot, error) in
-                
-                if let snapshot {
-                    for document in snapshot.documents{
-                        let id: String = document.documentID
-                        
-                        let docData = document.data()
-                        let category: String = docData["category"] as? String ?? ""
-                        let images: [String] = docData["images"] as? [String] ?? []
-                        let timeStampData: Timestamp = docData["createdAt"] as? Timestamp ?? Timestamp()
-                        let createdAt : Date = timeStampData.dateValue()
-                        let senderEmail: String = docData["senderEmail"] as? String ?? ""
-                        let senderNickname: String = docData["senderNickname"] as? String ?? ""
-                        let senderPost: String = docData["senderPost"] as? String ?? ""
-                        let receiverNickname: String = docData["receiverNickname"] as? String ?? ""
-                        let receiverEmail: String = docData["receiverEmail"] as? String ?? ""
-                        let receiverPost: String = docData["receiverPost"] as? String ?? ""
-                        let isdoneMatching: Bool = docData["isdoneMatching"] as? Bool ?? false
-                        let isdoneReply: Bool = docData["isdoneReply"] as? Bool ?? false
-                        let isdoneReplyMatchedFeed: Bool = docData["isdoneReplyMatchedFeed"] as? Bool ?? false
-                        let matchedFeedID: String = docData["matchedFeedID"] as? String ?? ""
-                        
-                        self.feed.append(
-                            Feed(
-                                id: id,
-                                category: category,
-                                images: images,
-                                createdAt: createdAt,
-                                senderEmail: senderEmail,
-                                senderNickname: senderNickname,
-                                senderPost: senderPost,
-                                receiverNickname: receiverNickname,
-                                receiverEmail: receiverEmail,
-                                receiverPost: receiverPost,
-                                isdoneMatching: isdoneMatching,
-                                isdoneReply: isdoneReply,
-                                isdoneReplyMatchedFeed: isdoneReplyMatchedFeed,
-                                matchedFeedID: matchedFeedID
-                            )
-                        )
-                        self.fetchImage(postID: id, userEmail: userEmail, imageNames: images)
-                    }
-                }
-            }
-    }
-    
-    // 매칭된 상대방 글을 가져오는 함수
+    //MARK: - 매칭된 상대방 글을 가져오는 함수
     func fetchMatchedOpponentFeed(userEmail: String) {
         matchedOpponentFeed.removeAll()
         database.collection("Feed")
@@ -325,7 +261,7 @@ class FeedStore: ObservableObject {
         self.matchedOpponentFeed.sort(by: { $0.createdAt < $1.createdAt })
     }
     
-    // 매칭이 완료된것을 알리는 함수 (리스너)
+    //MARK: - 매칭이 완료된것을 알리는 함수 (리스너)
     func notifyMatchingComplete(userEmail: String) {
         database.collection("Feed")
             .whereField("senderEmail", isEqualTo: userEmail)
@@ -379,7 +315,7 @@ class FeedStore: ObservableObject {
             }
     }
     
-    // 칭찬글 작성하고 상대방 글 수정하는 함수
+    //MARK: - 상대방 Feed 데이터에 답칭찬글을 저장하고 나의 Feed 데이터에 매칭된 Feed에 칭찬답글을 완료했다는 Bool값을 true로 수정해주는 함수
     func updateOpponentFeed(userEmail: String, feedID: String, matchedFeedID: String, text: String) {
         database.collection("Feed")
             .document(feedID)
@@ -406,55 +342,6 @@ class FeedStore: ObservableObject {
                 }
             }
         fetchMatchedOpponentFeed(userEmail: userEmail)
-    }
-    
-    // 나의 매칭 및 작성 완료된 글을 가져오는 함수
-    func fetchCompletedFeed(userEmail: String) {
-        completedFeed.removeAll()
-        database.collection("Feed")
-            .whereField("senderEmail", isEqualTo: userEmail)
-            .whereField("isdoneReply", isEqualTo: true)
-            .getDocuments { (snapshot, error) in
-                
-                if let snapshot {
-                    for document in snapshot.documents{
-                        let id: String = document.documentID
-                        
-                        let docData = document.data()
-                        let category: String = docData["category"] as? String ?? ""
-                        let images: [String] = docData["images"] as? [String] ?? []
-                        let senderEmail: String = docData["senderEmail"] as? String ?? ""
-                        let senderNickname: String = docData["senderNickname"] as? String ?? ""
-                        let senderPost: String = docData["senderPost"] as? String ?? ""
-                        let receiverNickname: String = docData["receiverNickname"] as? String ?? ""
-                        let receiverEmail: String = docData["receiverEmail"] as? String ?? ""
-                        let receiverPost: String = docData["receiverPost"] as? String ?? ""
-                        let isdoneMatching: Bool = docData["isdoneMatching"] as? Bool ?? false
-                        let isdoneReply: Bool = docData["isdoneReply"] as? Bool ?? false
-                        let isdoneReplyMatchedFeed: Bool = docData["isdoneReplyMatchedFeed"] as? Bool ?? false
-                        let matchedFeedID: String = docData["matchedFeedID"] as? String ?? ""
-                        
-                        self.completedFeed.append(
-                            Feed(
-                                id: id,
-                                category: category,
-                                images: images,
-                                senderEmail: senderEmail,
-                                senderNickname: senderNickname,
-                                senderPost: senderPost,
-                                receiverNickname: receiverNickname,
-                                receiverEmail: receiverEmail,
-                                receiverPost: receiverPost,
-                                isdoneMatching: isdoneMatching,
-                                isdoneReply: isdoneReply,
-                                isdoneReplyMatchedFeed: isdoneReplyMatchedFeed,
-                                matchedFeedID: matchedFeedID
-                            )
-                        )
-                        self.fetchImage(postID: id, userEmail: userEmail, imageNames: images)
-                    }
-                }
-            }
     }
     
     //MARK: - 마이페이지에 칭찬 완료된 Feed를 저장하는 함수

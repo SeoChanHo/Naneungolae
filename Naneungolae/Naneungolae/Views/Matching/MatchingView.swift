@@ -13,7 +13,7 @@ struct MatchingView: View {
     @EnvironmentObject var userStore: UserStore
     @EnvironmentObject var authStore: AuthStore
 
-    // 새로운 포토스 피커
+    // 포토스 피커
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedPhotosData: [Data] = []
     
@@ -201,18 +201,6 @@ struct MatchingView: View {
                             .cornerRadius(10)
                     }
                     
-                    NavigationLink {
-                        TestView()
-                    } label: {
-                        Text("칭찬 받은 글 보러가기")
-                            .font(.system(size: 17))
-                            .bold()
-                            .foregroundColor(Color.white)
-                            .frame(width: UIScreen.main.bounds.width - 100, height: 12)
-                            .padding()
-                            .background(Color("buttonColor"))
-                            .cornerRadius(10)
-                    }
                     Spacer()
                 }
                 .scrollDisabled(true)

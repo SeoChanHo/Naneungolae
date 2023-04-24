@@ -33,7 +33,6 @@
 		AED5EA5D29DF09BC00C0653D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5C29DF09BC00C0653D /* FirebaseFirestore */; };
 		AED5EA5F29DF09BC00C0653D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AED5EA5E29DF09BC00C0653D /* FirebaseFirestoreSwift */; };
 		AEDC24E429E39ADF00C8D7F1 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = AEDC24E329E39ADF00C8D7F1 /* FirebaseStorage */; };
-		AEDC24E629E3A6DF00C8D7F1 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDC24E529E3A6DF00C8D7F1 /* TestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,7 +58,6 @@
 		AE29A3B929DCB72B00B32C77 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		AE2A775C29E684360028DBD6 /* writeComplimentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = writeComplimentView.swift; sourceTree = "<group>"; };
 		AE2A776029E93F880028DBD6 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
-		AEDC24E529E3A6DF00C8D7F1 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,7 +153,6 @@
 			isa = PBXGroup;
 			children = (
 				AE29A3A729DB32F800B32C77 /* MatchingView.swift */,
-				AEDC24E529E3A6DF00C8D7F1 /* TestView.swift */,
 				AE2A775C29E684360028DBD6 /* writeComplimentView.swift */,
 			);
 			path = Matching;
@@ -292,7 +289,6 @@
 				AE27954A29F6C68D00995BEF /* MyPageFeedDetailView.swift in Sources */,
 				AE2A776129E93F880028DBD6 /* View+.swift in Sources */,
 				AE29A3A829DB32F800B32C77 /* MatchingView.swift in Sources */,
-				AEDC24E629E3A6DF00C8D7F1 /* TestView.swift in Sources */,
 				AE29A3AC29DB4DAA00B32C77 /* WhaleView.swift in Sources */,
 				AE29A3AE29DB4DB700B32C77 /* MyPageView.swift in Sources */,
 				AE29A39A29DB311D00B32C77 /* Feed.swift in Sources */,
