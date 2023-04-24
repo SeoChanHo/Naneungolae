@@ -15,6 +15,7 @@ struct MyPageView: View {
     @State private var isValidNickname: Bool = true
     @State private var isShowingFavorites: Bool = false
     @State private var nickname: String = ""
+    @FocusState private var focusedField: Bool
     
     var body: some View {
         VStack {
@@ -44,6 +45,7 @@ struct MyPageView: View {
                         TextField("닉네임을 입력해주세요", text: $nickname)
                             .font(.title2)
                             .frame(width: 300, height: 25)
+                            .focused($focusedField)
                         Rectangle()
                             .frame(width: 320 ,height: 1, alignment: .bottom)
                         
@@ -88,6 +90,7 @@ struct MyPageView: View {
                             Button {
                                 nickname = userStore.user.nickname
                                 isEditingNickname.toggle()
+                                focusedField = true
                             } label: {
                                 Text("수정")
                                     .foregroundColor(Color("mainColor"))

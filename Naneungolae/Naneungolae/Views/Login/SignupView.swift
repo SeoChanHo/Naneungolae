@@ -140,7 +140,9 @@ struct SignupView: View {
         .onTapGesture {
             endTextEditing()
         }
-
+        .onAppear {
+            focusedField = .email
+        }
     }
     
     func checkEmailValid(_ string: String) -> Bool {
