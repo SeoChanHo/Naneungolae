@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE27954A29F6C68D00995BEF /* MyPageFeedDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE27954929F6C68D00995BEF /* MyPageFeedDetailView.swift */; };
 		AE29A37F29DB2EDC00B32C77 /* NaneungolaeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE29A37E29DB2EDC00B32C77 /* NaneungolaeApp.swift */; };
 		AE29A38129DB2EDC00B32C77 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE29A38029DB2EDC00B32C77 /* ContentView.swift */; };
 		AE29A38329DB2EDD00B32C77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE29A38229DB2EDD00B32C77 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE27954929F6C68D00995BEF /* MyPageFeedDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageFeedDetailView.swift; sourceTree = "<group>"; };
 		AE29A37B29DB2EDC00B32C77 /* Naneungolae.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Naneungolae.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE29A37E29DB2EDC00B32C77 /* NaneungolaeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaneungolaeApp.swift; sourceTree = "<group>"; };
 		AE29A38029DB2EDC00B32C77 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				AE29A3AD29DB4DB700B32C77 /* MyPageView.swift */,
+				AE27954929F6C68D00995BEF /* MyPageFeedDetailView.swift */,
 				AE29A3B329DCB4D200B32C77 /* SettingView.swift */,
 			);
 			path = MyPage;
@@ -286,6 +289,7 @@
 				AE29A3A129DB321A00B32C77 /* AuthStore.swift in Sources */,
 				AE2A775D29E684360028DBD6 /* writeComplimentView.swift in Sources */,
 				AE29A3A529DB324700B32C77 /* MainTabView.swift in Sources */,
+				AE27954A29F6C68D00995BEF /* MyPageFeedDetailView.swift in Sources */,
 				AE2A776129E93F880028DBD6 /* View+.swift in Sources */,
 				AE29A3A829DB32F800B32C77 /* MatchingView.swift in Sources */,
 				AEDC24E629E3A6DF00C8D7F1 /* TestView.swift in Sources */,

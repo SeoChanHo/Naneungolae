@@ -138,7 +138,13 @@ struct MyPageView: View {
                             .padding(.top, 50)
                     } else {
                         ForEach(feedStore.favoritesFeed) { feed in
-                            myPageFeedListCell(feed: feed)
+                            NavigationLink {
+                                MyPageFeedDetailView(feed: feed)
+                            } label: {
+                                myPageFeedListCell(feed: feed)
+                                    
+                            }
+                            .foregroundColor(.black)
                         }
                     }
                 } else {
@@ -149,7 +155,12 @@ struct MyPageView: View {
                             .padding(.top, 50)
                     } else {
                         ForEach(feedStore.myPageFeed) { feed in
-                            myPageFeedListCell(feed: feed)
+                            NavigationLink {
+                                MyPageFeedDetailView(feed: feed)
+                            } label: {
+                                myPageFeedListCell(feed: feed)
+                            }
+                            .foregroundColor(.black)
                         }
                     }
                 }

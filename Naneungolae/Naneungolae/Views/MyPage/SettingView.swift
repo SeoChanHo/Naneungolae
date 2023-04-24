@@ -27,8 +27,6 @@ struct SettingView: View {
             } label: {
                 Text("로그아웃")
             }
-            
-            
         }
         .scrollDisabled(true)
     }
