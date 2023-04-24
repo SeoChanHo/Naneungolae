@@ -21,6 +21,7 @@ struct writeComplimentView: View {
                 Spacer()
                 Text("매칭된 칭찬이 없습니다")
                     .font(.title)
+                    .foregroundColor(.gray)
                 Spacer()
             } else {
                 ScrollView {

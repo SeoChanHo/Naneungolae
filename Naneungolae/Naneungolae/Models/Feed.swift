@@ -12,11 +12,12 @@ struct Feed: Codable, Identifiable {
     let category: String
     let images: [String]
     var createdAt: Date = Date()
+    var isBookmarked: Bool = false
     
     var dateText: String {
         let format = DateFormatter()
         format.locale = Locale(identifier: "ko_KR")
-        format.dateFormat = "M월 d일 HH:mm"
+        format.dateFormat = "YYYY년 M월 d일 HH:mm"
         return format.string(from: createdAt)
     }
     

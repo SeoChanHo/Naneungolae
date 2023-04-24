@@ -21,6 +21,8 @@ class FeedStore: ObservableObject {
     @Published var matchableFeed: [Feed] = []
     // 마이페이지 완료된 Feed
     @Published var myPageFeed: [Feed] = []
+    // 마이페이지 즐겨찾기된 Feed
+    @Published var favoritesFeed: [Feed] = []
     
     let database = Firestore.firestore()
     let storage = Storage.storage()
@@ -316,11 +318,11 @@ class FeedStore: ObservableObject {
                                 matchedFeedID: matchedFeedID
                             )
                         )
-                        self.matchedOpponentFeed.sort(by: { $0.createdAt < $1.createdAt })
                         self.fetchImage(postID: id, userEmail: senderEmail, imageNames: images)
                     }
                 }
             }
+        self.matchedOpponentFeed.sort(by: { $0.createdAt < $1.createdAt })
     }
     
     // 매칭이 완료된것을 알리는 함수 (리스너)
@@ -411,7 +413,6 @@ class FeedStore: ObservableObject {
         completedFeed.removeAll()
         database.collection("Feed")
             .whereField("senderEmail", isEqualTo: userEmail)
-        //            .whereField("isdoneMatching", isEqualTo: true)
             .whereField("isdoneReply", isEqualTo: true)
             .getDocuments { (snapshot, error) in
                 
@@ -492,6 +493,7 @@ class FeedStore: ObservableObject {
                         let images: [String] = docData["images"] as? [String] ?? []
                         let timeStampData: Timestamp = docData["createdAt"] as? Timestamp ?? Timestamp()
                         let createdAt : Date = timeStampData.dateValue()
+                        let isBookmarked: Bool = docData["isBookmarked"] as? Bool ?? false
                         let senderEmail: String = docData["senderEmail"] as? String ?? ""
                         let senderNickname: String = docData["senderNickname"] as? String ?? ""
                         let senderPost: String = docData["senderPost"] as? String ?? ""
@@ -509,6 +511,7 @@ class FeedStore: ObservableObject {
                                 category: category,
                                 images: images,
                                 createdAt: createdAt,
+                                isBookmarked: isBookmarked,
                                 senderEmail: senderEmail,
                                 senderNickname: senderNickname,
                                 senderPost: senderPost,
@@ -521,8 +524,46 @@ class FeedStore: ObservableObject {
                                 matchedFeedID: matchedFeedID
                             )
                         )
+                        self.fetchImage(postID: id, userEmail: senderEmail, imageNames: images)
                     }
+                    self.myPageFeed.sort(by: { $0.createdAt > $1.createdAt })
+                    self.favoritesFeed = self.myPageFeed.filter { $0.isBookmarked == true }
                 }
             }
+    }
+    
+    //MARK: - 마이페이지에 저장된 Feed의 즐겨찾기를 설정하는 함수
+    func settingFavoritesFeed(feedID: String, isBookmarked: Bool, userEmail: String) {
+        if isBookmarked {
+            database.collection("Users")
+                .document(userEmail)
+                .collection("MyFeed")
+                .document(feedID)
+                .updateData(
+                    ["isBookmarked" : false]
+                ) { err in
+                    if let err = err {
+                        print("Error updating document: \(err)")
+                    } else {
+                        print("Document successfully updated")
+                    }
+                }
+
+        } else {
+            database.collection("Users")
+                .document(userEmail)
+                .collection("MyFeed")
+                .document(feedID)
+                .updateData(
+                    ["isBookmarked" : true]
+                ) { err in
+                    if let err = err {
+                        print("Error updating document: \(err)")
+                    } else {
+                        print("Document successfully updated")
+                    }
+                }
+        }
+        fetchCompletedFeedInMyPage(userEmail: userEmail)
     }
 }

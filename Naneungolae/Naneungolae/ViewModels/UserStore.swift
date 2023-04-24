@@ -49,4 +49,20 @@ class UserStore: ObservableObject {
             .document(user.id).delete()
         fetchUser(userEmail: user.email)
     }
+    
+    func updateUserNickname(nickname: String) {
+        database.collection("Users")
+            .document(self.user.email)
+            .updateData(
+                ["nickname" : nickname]
+            ) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                } else {
+                    print("Document successfully updated")
+                }
+            }
+        
+        fetchUser(userEmail: self.user.email)
+    }
 }
