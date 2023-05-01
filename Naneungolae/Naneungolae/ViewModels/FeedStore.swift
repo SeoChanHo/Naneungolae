@@ -24,6 +24,10 @@ class FeedStore: ObservableObject {
     // 마이페이지 즐겨찾기된 Feed
     @Published var favoritesFeed: [Feed] = []
     
+    //MARK: - 알림
+    @Published var notifications: [Notification] = []
+    @Published var notificationMatchedFeed: [String: Feed] = [:]
+    
     let database = Firestore.firestore()
     let storage = Storage.storage()
     
@@ -48,9 +52,9 @@ class FeedStore: ObservableObject {
     }
     
     //MARK: - 스토리지에 저장된 이미지를 불러와 ImageDict에 저장하는 함수
-    func fetchImage(postID: String, userEmail: String, imageNames: [String]) {
+    func fetchImage(feedID: String, userEmail: String, imageNames: [String]) {
         for imageName in imageNames {
-            let ref = storage.reference().child("images/\(postID)|\(userEmail)/\(imageName)")
+            let ref = storage.reference().child("images/\(feedID)|\(userEmail)/\(imageName)")
             
             ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
                 if let error = error {
@@ -186,10 +190,10 @@ class FeedStore: ObservableObject {
             }
     }
     
-     //MARK: -  피드 지우는 함수
-    func removeFeed(_ feed: Feed){
+    //MARK: -  피드 지우는 함수
+    func removeFeed(feedID: String) {
         database.collection("Feed")
-            .document(feed.id)
+            .document(feedID)
             .delete() { error in
                 if let error = error {
                     print("Error removing document: \(error.localizedDescription)")
@@ -197,14 +201,14 @@ class FeedStore: ObservableObject {
                     print("Document successfully removed!")
                 }
             }
-        let imageRef = storage.reference().child("images/\(feed.id)")
-        imageRef.delete { error in
-            if let error = error {
-                print("Error removing image from storage\n\(error.localizedDescription)")
-            } else {
-                print("images directory deleted successfully")
-            }
-        }
+//        let imageRef = storage.reference().child("images/\(feed.id)")
+//        imageRef.delete { error in
+//            if let error = error {
+//                print("Error removing image from storage\n\(error.localizedDescription)")
+//            } else {
+//                print("images directory deleted successfully")
+//            }
+//        }
     }
     
     //MARK: - 매칭된 상대방 글을 가져오는 함수
@@ -254,7 +258,7 @@ class FeedStore: ObservableObject {
                                 matchedFeedID: matchedFeedID
                             )
                         )
-                        self.fetchImage(postID: id, userEmail: senderEmail, imageNames: images)
+                        self.fetchImage(feedID: id, userEmail: senderEmail, imageNames: images)
                     }
                 }
             }
@@ -306,14 +310,18 @@ class FeedStore: ObservableObject {
                             
                             self.notificationFeed.append(feed)
                             
-                            if isdoneReply && isdoneReplyMatchedFeed {
+                            if isdoneMatching && !isdoneReply && !isdoneReplyMatchedFeed {
+                                self.addNotification(userEmail: userEmail, feedID: id, notificationType: "matching")
+                            } else if isdoneMatching && isdoneReply && isdoneReplyMatchedFeed {
                                 self.addCompletedFeedInMyPage(feed: feed, userEmail: userEmail)
+                                self.addNotification(userEmail: userEmail, feedID: id, notificationType: "complete")
                             }
                         }
                     }
                 }
             }
     }
+    
     
     //MARK: - 상대방 Feed 데이터에 답칭찬글을 저장하고 나의 Feed 데이터에 매칭된 Feed에 칭찬답글을 완료했다는 Bool값을 true로 수정해주는 함수
     func updateOpponentFeed(userEmail: String, feedID: String, matchedFeedID: String, text: String) {
@@ -346,22 +354,36 @@ class FeedStore: ObservableObject {
     
     //MARK: - 마이페이지에 칭찬 완료된 Feed를 저장하는 함수
     func addCompletedFeedInMyPage(feed: Feed, userEmail: String) {
-        database.collection("Users").document(userEmail).collection("MyFeed").document(feed.id)
-            .setData(["id" : feed.id,
-                      "category" : feed.category,
-                      "images" : feed.images,
-                      "createdAt" : feed.createdAt,
-                      "senderEmail" : feed.senderEmail,
-                      "senderNickname" : feed.senderNickname,
-                      "senderPost" : feed.senderPost,
-                      "receiverNickname" : feed.receiverNickname,
-                      "receiverEmail" : feed.receiverEmail,
-                      "receiverPost" : feed.receiverPost,
-                      "isdoneMatching" : feed.isdoneMatching,
-                      "isdoneReply" : feed.isdoneReply,
-                      "isdoneReplyMatchedFeed" : feed.isdoneReplyMatchedFeed,
-                      "matchedFeedID" : feed.matchedFeedID
-                     ])
+        database.collection("Users")
+            .document(userEmail).collection("MyFeed")
+            .getDocuments { (snapshot, error) in
+                if let snapshot {
+                    for document in snapshot.documents {
+                        if document.documentID == feed.id {
+                            return
+                        }
+                    }
+                }
+                self.database.collection("Users")
+                    .document(userEmail)
+                    .collection("MyFeed")
+                    .document(feed.id)
+                    .setData(["id" : feed.id,
+                              "category" : feed.category,
+                              "images" : feed.images,
+                              "createdAt" : feed.createdAt,
+                              "senderEmail" : feed.senderEmail,
+                              "senderNickname" : feed.senderNickname,
+                              "senderPost" : feed.senderPost,
+                              "receiverNickname" : feed.receiverNickname,
+                              "receiverEmail" : feed.receiverEmail,
+                              "receiverPost" : feed.receiverPost,
+                              "isdoneMatching" : feed.isdoneMatching,
+                              "isdoneReply" : feed.isdoneReply,
+                              "isdoneReplyMatchedFeed" : feed.isdoneReplyMatchedFeed,
+                              "matchedFeedID" : feed.matchedFeedID
+                             ])
+            }
     }
     
     //MARK: - 마이페이지에서 저장된 Feed들을 불러오는 함수
@@ -411,7 +433,7 @@ class FeedStore: ObservableObject {
                                 matchedFeedID: matchedFeedID
                             )
                         )
-                        self.fetchImage(postID: id, userEmail: senderEmail, imageNames: images)
+                        self.fetchImage(feedID: id, userEmail: senderEmail, imageNames: images)
                     }
                     self.myPageFeed.sort(by: { $0.createdAt > $1.createdAt })
                     self.favoritesFeed = self.myPageFeed.filter { $0.isBookmarked == true }
@@ -435,7 +457,7 @@ class FeedStore: ObservableObject {
                         print("Document successfully updated")
                     }
                 }
-
+            
         } else {
             database.collection("Users")
                 .document(userEmail)
@@ -452,5 +474,140 @@ class FeedStore: ObservableObject {
                 }
         }
         fetchCompletedFeedInMyPage(userEmail: userEmail)
+    }
+    
+    //MARK: - 알림을 추가하는 함수
+    func addNotification(userEmail: String, feedID: String, notificationType: String) {
+        database.collection("Users")
+            .document(userEmail)
+            .collection("Notifications")
+            .getDocuments { (snapshot, error) in
+                if let snapshot {
+                    for document in snapshot.documents {
+                        if document.documentID == feedID {
+                            return
+                        }
+                    }
+                }
+                self.database.collection("Users")
+                    .document(userEmail)
+                    .collection("Notifications")
+                    .document(feedID)
+                    .setData(["id" : feedID,
+                              "date" : Date(),
+                              "notificationType" : notificationType
+                             ])
+            }
+        fetchNotification(userEmail: userEmail)
+    }
+    
+    //MARK: - 알림을 가져오는 함수
+    func fetchNotification(userEmail: String) {
+        database.collection("Users")
+            .document(userEmail)
+            .collection("Notifications")
+            .order(by:"date")
+            .getDocuments { (snapshot, error) in
+                if let snapshot {
+                    self.notifications.removeAll()
+                    self.notificationFeed.removeAll()
+                    for document in snapshot.documents{
+                        let id: String = document.documentID
+                        
+                        let docData = document.data()
+                        let timeStampData: Timestamp = docData["date"] as? Timestamp ?? Timestamp()
+                        let date : Date = timeStampData.dateValue()
+                        let notificationType: String = docData["notificationType"] as? String ?? ""
+                        self.notifications.append(
+                            Notification(
+                                id: id,
+                                date: date,
+                                notificationType: notificationType
+                            )
+                        )
+                        self.fetchNotificationFeed(userEmail: userEmail, feedID: id)
+                    }
+                }
+            }
+    }
+    
+    //MARK: - 알림에 해당하는 Feed를 가져오는 함수
+    func fetchNotificationFeed(userEmail: String, feedID: String) {
+        database.collection("Users")
+            .document(userEmail)
+            .collection("MyFeed")
+            .document(feedID)
+            .getDocument { (snapshot, error) in
+                if let data = snapshot?.data() {
+                    let id: String = data["id"] as? String ?? ""
+                    let category: String = data["category"] as? String ?? ""
+                    let images: [String] = data["images"] as? [String] ?? []
+                    let timeStampData: Timestamp = data["createdAt"] as? Timestamp ?? Timestamp()
+                    let createdAt : Date = timeStampData.dateValue()
+                    let senderEmail: String = data["senderEmail"] as? String ?? ""
+                    let senderNickname: String = data["senderNickname"] as? String ?? ""
+                    let senderPost: String = data["senderPost"] as? String ?? ""
+                    let receiverNickname: String = data["receiverNickname"] as? String ?? ""
+                    let receiverEmail: String = data["receiverEmail"] as? String ?? ""
+                    let receiverPost: String = data["receiverPost"] as? String ?? ""
+                    let isdoneMatching: Bool = data["isdoneMatching"] as? Bool ?? false
+                    let isdoneReply: Bool = data["isdoneReply"] as? Bool ?? false
+                    let isdoneReplyMatchedFeed: Bool = data["isdoneReplyMatchedFeed"] as? Bool ?? false
+                    let matchedFeedID: String = data["matchedFeedID"] as? String ?? ""
+                    
+                    let feed = Feed(
+                        id: id,
+                        category: category,
+                        images: images,
+                        createdAt: createdAt,
+                        senderEmail: senderEmail,
+                        senderNickname: senderNickname,
+                        senderPost: senderPost,
+                        receiverNickname: receiverNickname,
+                        receiverEmail: receiverEmail,
+                        receiverPost: receiverPost,
+                        isdoneMatching: isdoneMatching,
+                        isdoneReply: isdoneReply,
+                        isdoneReplyMatchedFeed: isdoneReplyMatchedFeed,
+                        matchedFeedID: matchedFeedID
+                    )
+                    self.notificationMatchedFeed[feedID] = feed
+                    self.fetchImage(feedID: id, userEmail: userEmail, imageNames: images)
+                }
+            }
+    }
+    
+    
+    //MARK: - 모든 작업이 완료된 Feed를 확인하면 해당 알림을 삭제하는 함수
+    func deleteCompleteNotification(userEmail: String, feedID: String) {
+        database.collection("Users")
+            .document(userEmail)
+            .collection("Notifications")
+            .document(feedID)
+            .delete() { error in
+                if let error = error {
+                    print("Error removing document: \(error.localizedDescription)")
+                } else {
+                    self.removeFeed(feedID: feedID)
+                    print("Document successfully removed!")
+                }
+            }
+        fetchNotification(userEmail: userEmail)
+    }
+    
+    //MARK: - 매칭이 완료된 Feed에 칭찬답글을 작성하면 해당 알림을 삭제하는 함수
+    func deleteMatchingNotification(userEmail: String, feedID: String) {
+        database.collection("Users")
+            .document(userEmail)
+            .collection("Notifications")
+            .document(feedID)
+            .delete() { error in
+                if let error = error {
+                    print("Error removing document: \(error.localizedDescription)")
+                } else {
+                    print("Document successfully removed!")
+                }
+            }
+        fetchNotification(userEmail: userEmail)
     }
 }

@@ -126,6 +126,8 @@ struct matchedOpponentFeedListCell: View {
             
             Button {
                 feedStore.updateOpponentFeed(userEmail: userStore.user.email ,feedID: feed.id, matchedFeedID: feed.matchedFeedID, text: complimentText)
+                feedStore.deleteMatchingNotification(userEmail: userStore.user.email, feedID: feed.matchedFeedID)
+                userStore.addNumberOfCompliments()
                 isShowingToast.toggle()
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) {
                     isShowingToast.toggle()

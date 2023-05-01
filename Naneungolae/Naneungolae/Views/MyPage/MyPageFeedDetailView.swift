@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MyPageFeedDetailView: View {
     @EnvironmentObject var feedStore: FeedStore
+    @EnvironmentObject var userStore: UserStore
     
     let feed: Feed
     
@@ -91,6 +92,9 @@ struct MyPageFeedDetailView: View {
             Text(feed.receiverPost)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
+        }
+        .onAppear {
+            feedStore.deleteCompleteNotification(userEmail: userStore.user.email, feedID: feed.id)
         }
     }
 }

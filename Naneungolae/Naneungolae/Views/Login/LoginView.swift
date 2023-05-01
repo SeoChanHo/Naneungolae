@@ -107,7 +107,6 @@ struct LoginView: View {
                     }
                 }
                 .padding()
-
                 .background(RoundedRectangle(cornerRadius: 12).fill(.white))
                 .foregroundColor(.black)
                 .bold()

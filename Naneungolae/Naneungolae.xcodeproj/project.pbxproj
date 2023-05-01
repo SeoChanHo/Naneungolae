@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AE27954A29F6C68D00995BEF /* MyPageFeedDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE27954929F6C68D00995BEF /* MyPageFeedDetailView.swift */; };
+		AE27955129F7BCDE00995BEF /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE27955029F7BCDE00995BEF /* Notification.swift */; };
+		AE27955729FBD1F700995BEF /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE27955629FBD1F700995BEF /* NotificationListView.swift */; };
 		AE29A37F29DB2EDC00B32C77 /* NaneungolaeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE29A37E29DB2EDC00B32C77 /* NaneungolaeApp.swift */; };
 		AE29A38129DB2EDC00B32C77 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE29A38029DB2EDC00B32C77 /* ContentView.swift */; };
 		AE29A38329DB2EDD00B32C77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE29A38229DB2EDD00B32C77 /* Assets.xcassets */; };
@@ -37,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		AE27954929F6C68D00995BEF /* MyPageFeedDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageFeedDetailView.swift; sourceTree = "<group>"; };
+		AE27955029F7BCDE00995BEF /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		AE27955629FBD1F700995BEF /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
 		AE29A37B29DB2EDC00B32C77 /* Naneungolae.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Naneungolae.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE29A37E29DB2EDC00B32C77 /* NaneungolaeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaneungolaeApp.swift; sourceTree = "<group>"; };
 		AE29A38029DB2EDC00B32C77 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 				AE29A39729DB311D00B32C77 /* Feed.swift */,
 				AE29A39529DB311D00B32C77 /* User.swift */,
 				AE29A39629DB311D00B32C77 /* Whale.swift */,
+				AE27955029F7BCDE00995BEF /* Notification.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 			children = (
 				AE29A3A729DB32F800B32C77 /* MatchingView.swift */,
 				AE2A775C29E684360028DBD6 /* writeComplimentView.swift */,
+				AE27955629FBD1F700995BEF /* NotificationListView.swift */,
 			);
 			path = Matching;
 			sourceTree = "<group>";
@@ -254,6 +260,7 @@
 			packageReferences = (
 				AE29A3B029DC9DEA00B32C77 /* XCRemoteSwiftPackageReference "AlertToast" */,
 				AED5EA5929DF09BC00C0653D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				AE27954B29F7BB0A00995BEF /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = AE29A37C29DB2EDC00B32C77 /* Products */;
 			projectDirPath = "";
@@ -294,6 +301,8 @@
 				AE29A39A29DB311D00B32C77 /* Feed.swift in Sources */,
 				AE29A37F29DB2EDC00B32C77 /* NaneungolaeApp.swift in Sources */,
 				AE29A3B629DCB66B00B32C77 /* LoginView.swift in Sources */,
+				AE27955129F7BCDE00995BEF /* Notification.swift in Sources */,
+				AE27955729FBD1F700995BEF /* NotificationListView.swift in Sources */,
 				AE29A3BA29DCB72B00B32C77 /* SignupView.swift in Sources */,
 				AE29A3B429DCB4D200B32C77 /* SettingView.swift in Sources */,
 				AE29A3A229DB321A00B32C77 /* FeedStore.swift in Sources */,
@@ -504,6 +513,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AE27954B29F7BB0A00995BEF /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.38.0;
+			};
+		};
 		AE29A3B029DC9DEA00B32C77 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elai950/AlertToast.git";

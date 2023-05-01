@@ -65,4 +65,20 @@ class UserStore: ObservableObject {
         
         fetchUser(userEmail: self.user.email)
     }
+    
+    func addNumberOfCompliments() {
+        database.collection("Users")
+            .document(self.user.email)
+            .updateData(
+                ["totalNumberOfCompliments" : self.user.totalNumberOfCompliments + 1]
+            ) { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                } else {
+                    print("Document successfully updated")
+                }
+            }
+        
+        fetchUser(userEmail: self.user.email)
+    }
 }

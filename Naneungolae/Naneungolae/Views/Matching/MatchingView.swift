@@ -12,7 +12,8 @@ struct MatchingView: View {
     @EnvironmentObject var feedStore: FeedStore
     @EnvironmentObject var userStore: UserStore
     @EnvironmentObject var authStore: AuthStore
-
+//    @EnvironmentObject var notificationStore: NotificationStore
+    
     // 포토스 피커
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedPhotosData: [Data] = []
@@ -20,8 +21,6 @@ struct MatchingView: View {
     var keywords: [String] = ["응원", "위로", "자신감", "목표달성", "인정", "축하"]
     @State var selectedKeyword: String = "응원"
     @State var complimentText: String = ""
-    @State var isShowingNotificationList: Bool = false
-    @State var isNotification: Bool = false
     
     func selectedPhotosToUIImage() -> [UIImage] {
         var uiImages = [UIImage]()
@@ -36,7 +35,6 @@ struct MatchingView: View {
             Color("mainColor")
                 .edgesIgnoringSafeArea(.top)
             VStack {
-                
                 HStack {
                     Text("나는고래")
                         .foregroundColor(.white)
@@ -44,35 +42,22 @@ struct MatchingView: View {
                         .bold()
                         .padding()
                     Spacer()
-                    ZStack {
-                        Button {
-                            isShowingNotificationList.toggle()
-                        } label: {
+                    NavigationLink {
+                        NotificationListView()
+                    } label: {
+                        if feedStore.notifications.isEmpty {
                             Image(systemName: "bell.fill")
-                                .foregroundColor(.white)
-                                .font(.title3)
+                                .foregroundColor(.yellow)
+                                .font(.title2)
                                 .bold()
                                 .padding()
-                        }
-                        
-                        if isShowingNotificationList {
-                            ScrollView {
-                                ForEach(feedStore.notificationFeed) { feed in
-                                    if feed.isdoneMatching && !feed.isdoneReply {
-                                        Text("매칭 완료")
-                                    } else if feed.isdoneMatching && feed.isdoneReply {
-                                        NavigationLink {
-                                            MyPageView()
-                                        } label: {
-                                            Text("칭찬 완료")
-                                        }
-                                    }
-                                }
-                            }
-                            .frame(width: 100, height: 100)
-                            .background(Color.white)
-                            .offset(y: 100)
-                            .padding()
+                        } else {
+                            Image(systemName: "bell.badge.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.red, .yellow)
+                                .font(.title2)
+                                .bold()
+                                .padding()
                         }
                     }
                 }
@@ -127,7 +112,7 @@ struct MatchingView: View {
                         Text("받고 싶은 칭찬 키워드를 선택하세요")
                             .foregroundColor(.white)
                         Spacer()
-
+                        
                         Picker("키워드를 선택하세요", selection: $selectedKeyword) {
                             
                             ForEach(keywords, id: \.self) { keyword in
@@ -177,7 +162,7 @@ struct MatchingView: View {
                         
                     } label: {
                         Text("매칭 하기")
-                            .font(.system(size: 17))
+                            .font(.title3)
                             .bold()
                             .foregroundColor(Color.white)
                             .frame(width: UIScreen.main.bounds.width - 100, height: 12)
@@ -192,7 +177,7 @@ struct MatchingView: View {
                         
                     } label: {
                         Text("칭찬답글 하러가기")
-                            .font(.system(size: 17))
+                            .font(.title3)
                             .bold()
                             .foregroundColor(Color.white)
                             .frame(width: UIScreen.main.bounds.width - 100, height: 12)
@@ -200,6 +185,7 @@ struct MatchingView: View {
                             .background(Color("buttonColor"))
                             .cornerRadius(10)
                     }
+                    .padding(.top, 10)
                     
                     Spacer()
                 }
@@ -212,6 +198,7 @@ struct MatchingView: View {
         .task {
             userStore.fetchUser(userEmail: authStore.currentUser?.email ?? "")
             feedStore.notifyMatchingComplete(userEmail: authStore.currentUser?.email ?? "")
+            feedStore.fetchNotification(userEmail: authStore.currentUser?.email ?? "")
         }
     }
     
