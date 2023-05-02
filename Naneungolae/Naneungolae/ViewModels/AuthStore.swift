@@ -13,11 +13,13 @@ class AuthStore: ObservableObject {
     
     let userStore: UserStore = UserStore()
     
-    @Published var isLogin: Bool = false
-    
     @Published var currentUser: Firebase.User?
     
     let auth = Auth.auth()
+    
+    init() {
+        currentUser = auth.currentUser
+    }
     
     func registerUser(email: String, password: String, nickname: String) {
         auth.createUser(withEmail: email, password: password) { authResult, error in
@@ -29,7 +31,6 @@ class AuthStore: ObservableObject {
             
             self.userStore.createUser(User(id: email, email: email, nickname: nickname, totalNumberOfCompliments: 0))
             self.currentUser = user
-            self.isLogin = true
         }
     }
     
@@ -41,13 +42,12 @@ class AuthStore: ObservableObject {
             
             guard let user = authResult?.user else { return }
             self?.currentUser = user
-            self?.isLogin = true
         }
     }
     
     func signOut() {
+        currentUser = nil
         try? auth.signOut()
-        self.isLogin = false
         print("logout complete")
     }
 }

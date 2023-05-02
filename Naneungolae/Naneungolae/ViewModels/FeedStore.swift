@@ -201,14 +201,6 @@ class FeedStore: ObservableObject {
                     print("Document successfully removed!")
                 }
             }
-//        let imageRef = storage.reference().child("images/\(feed.id)")
-//        imageRef.delete { error in
-//            if let error = error {
-//                print("Error removing image from storage\n\(error.localizedDescription)")
-//            } else {
-//                print("images directory deleted successfully")
-//            }
-//        }
     }
     
     //MARK: - 매칭된 상대방 글을 가져오는 함수
@@ -260,9 +252,9 @@ class FeedStore: ObservableObject {
                         )
                         self.fetchImage(feedID: id, userEmail: senderEmail, imageNames: images)
                     }
+                    self.matchedOpponentFeed.sort(by: { $0.createdAt < $1.createdAt })
                 }
             }
-        self.matchedOpponentFeed.sort(by: { $0.createdAt < $1.createdAt })
     }
     
     //MARK: - 매칭이 완료된것을 알리는 함수 (리스너)

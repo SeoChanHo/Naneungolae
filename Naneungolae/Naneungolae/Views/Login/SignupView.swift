@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SignupView: View {
     @EnvironmentObject var authStore: AuthStore
-    @EnvironmentObject var userStore: UserStore
+//    @EnvironmentObject var userStore: UserStore
     
     @Environment(\.dismiss) private var dismiss
     

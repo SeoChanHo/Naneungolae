@@ -26,7 +26,6 @@ struct MyPageView: View {
                     .fontWeight(.bold)
                     .padding()
                 Spacer()
-                
                 NavigationLink {
                     SettingView()
                 } label: {
@@ -67,7 +66,6 @@ struct MyPageView: View {
                                     .font(.headline)
                                     .bold()
                             }
-                            
                             Button {
                                 isEditingNickname.toggle()
                             } label: {
@@ -110,7 +108,6 @@ struct MyPageView: View {
                             Spacer()
                         }
                         .padding(.top, 10)
-                        
                     }
                     Divider()
                 }
@@ -123,16 +120,14 @@ struct MyPageView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 20)
                 Spacer()
-                
                 HStack {
                     Spacer()
                     Text("즐겨찾기만 보기")
                     Toggle("Favorites", isOn: $isShowingFavorites).labelsHidden()
                         .toggleStyle(SwitchToggleStyle(tint: Color.yellow))
                         .padding(.trailing, 10)
-                    
                 }
-                
+
                 if isShowingFavorites {
                     if feedStore.favoritesFeed.isEmpty {
                         Text("즐겨찾기한 칭찬이 없습니다")
@@ -145,7 +140,6 @@ struct MyPageView: View {
                                 MyPageFeedDetailView(feed: feed)
                             } label: {
                                 myPageFeedListCell(feed: feed)
-                                    
                             }
                             .foregroundColor(.black)
                         }
@@ -238,8 +232,8 @@ struct myPageFeedListCell: View {
     }
 }
 
-struct MyPageView_Previews: PreviewProvider {
-    static var previews: some View {
-        MyPageView()
-    }
-}
+//struct MyPageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MyPageView()
+//    }
+//}

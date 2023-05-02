@@ -13,18 +13,11 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if authStore.isLogin {
+                if let _ = authStore.currentUser {
                     MainTabView()
                 } else {
                     LoginView()
                 }
-                /*
-                if let authStore.currentUser {
-                    // 뷰
-                } else {
-                    // 로그인뷰
-                }
-                 */
             }
         }
     }

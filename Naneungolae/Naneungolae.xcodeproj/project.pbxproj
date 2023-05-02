@@ -148,8 +148,8 @@
 			isa = PBXGroup;
 			children = (
 				AE29A39E29DB321A00B32C77 /* AuthStore.swift */,
-				AE29A39F29DB321A00B32C77 /* FeedStore.swift */,
 				AE29A3A029DB321A00B32C77 /* UserStore.swift */,
+				AE29A39F29DB321A00B32C77 /* FeedStore.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";

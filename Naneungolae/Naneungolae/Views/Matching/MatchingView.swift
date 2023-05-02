@@ -12,7 +12,6 @@ struct MatchingView: View {
     @EnvironmentObject var feedStore: FeedStore
     @EnvironmentObject var userStore: UserStore
     @EnvironmentObject var authStore: AuthStore
-//    @EnvironmentObject var notificationStore: NotificationStore
     
     // 포토스 피커
     @State private var selectedItems: [PhotosPickerItem] = []
@@ -196,9 +195,13 @@ struct MatchingView: View {
             endTextEditing()
         }
         .task {
-            userStore.fetchUser(userEmail: authStore.currentUser?.email ?? "")
-            feedStore.notifyMatchingComplete(userEmail: authStore.currentUser?.email ?? "")
-            feedStore.fetchNotification(userEmail: authStore.currentUser?.email ?? "")
+            if let userEmail = authStore.currentUser?.email {
+                userStore.fetchUser(userEmail: userEmail)
+                feedStore.notifyMatchingComplete(userEmail: userEmail)
+                feedStore.fetchNotification(userEmail: userEmail)
+                feedStore.fetchCompletedFeedInMyPage(userEmail: userEmail)
+                feedStore.fetchMatchedOpponentFeed(userEmail: userEmail)
+            }
         }
     }
     
