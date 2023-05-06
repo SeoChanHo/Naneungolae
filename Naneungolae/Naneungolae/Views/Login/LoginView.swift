@@ -14,6 +14,14 @@ struct LoginView: View {
     @State private var password: String = "123123"
     @FocusState private var focusedField: Field?
     
+    var loginErrorMassage: String {
+        if authStore.loginError {
+            return "이메일 또는 비밀번호가 일치하지 않습니다."
+        } else {
+            return ""
+        }
+    }
+    
     enum Field: Hashable {
         case email
         case password
@@ -26,14 +34,14 @@ struct LoginView: View {
             
             
             VStack {
-
+                
                 Image("LoginWhale")
                     .resizable()
                     .frame(width: 250, height: 250)
                     .padding(.bottom, 30)
                     .padding(.top, 50)
                 
-                VStack(spacing: 20) {
+                VStack {
                     VStack(alignment:.leading) {
                         TextField("이메일을 입력해주세요", text: $email)
                             .autocapitalization(.none)
@@ -46,6 +54,7 @@ struct LoginView: View {
                             }
                         
                     }
+                    .padding(.bottom, 10)
                     
                     VStack(alignment:.leading) {
                         SecureField("비밀번호를 입력해주세요", text: $password)
@@ -63,6 +72,11 @@ struct LoginView: View {
                                 }
                             }
                     }
+                    
+                    Text(loginErrorMassage)
+                        .font(.caption)
+                        .foregroundColor(.red)
+                        .frame(height: 10)
                     
                     HStack(spacing: 40) {
                         VStack {
@@ -92,7 +106,7 @@ struct LoginView: View {
                                 .padding(.leading, 30)
                                 
                                 Spacer()
-
+                                
                                 NavigationLink {
                                     SignupView()
                                 } label: {

@@ -14,6 +14,7 @@ class AuthStore: ObservableObject {
     let userStore: UserStore = UserStore()
     
     @Published var currentUser: Firebase.User?
+    @Published var loginError: Bool = false
     
     let auth = Auth.auth()
     
@@ -35,13 +36,17 @@ class AuthStore: ObservableObject {
     }
     
     func signIn(email: String, password: String) {
-        auth.signIn(withEmail: email, password: password) { [weak self] authResult, error in
+        auth.signIn(withEmail: email, password: password) { authResult, error in
             if let error {
                 print("Error: \(error.localizedDescription)")
+                self.loginError = true
+                return
+            } else {
+                self.loginError = false
             }
             
             guard let user = authResult?.user else { return }
-            self?.currentUser = user
+            self.currentUser = user
         }
     }
     
